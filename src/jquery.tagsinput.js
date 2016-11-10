@@ -87,6 +87,9 @@
 
 				if (options.unique) {
 					var skipTag = $(this).tagExist(value);
+					if(!skipTag && tags_callbacks[id]['tagValidator']){
+						skipTag = !tags_callbacks[id]['tagValidator'](value);
+					}
 					if(skipTag == true) {
 					    //Marks fake input as not_valid to let styling it
     				    $('#'+id+'_tag').addClass('not_valid');
@@ -221,11 +224,12 @@
 
 			delimiter[id] = data.delimiter;
 
-			if (settings.onAddTag || settings.onRemoveTag || settings.onChange) {
+			if (settings.onAddTag || settings.onRemoveTag || settings.onChange || settings.tagValidator) {
 				tags_callbacks[id] = new Array();
 				tags_callbacks[id]['onAddTag'] = settings.onAddTag;
 				tags_callbacks[id]['onRemoveTag'] = settings.onRemoveTag;
 				tags_callbacks[id]['onChange'] = settings.onChange;
+				tags_callbacks[id]['tagValidator'] = settings.tagValidator;
 			}
 
 			var markup = '<div id="'+id+'_tagsinput" class="tagsinput"><div id="'+id+'_addTag">';
